@@ -11,6 +11,7 @@ on:
         required: true
         options:
           - 'develop'
+          - '9.1.x'
           - '9.0.x'
           - '8.2.x'
           - '8.1.x'
@@ -282,6 +283,19 @@ jobs:
           - BASE_BRANCH: 9.0.x
             TEST_CAMPAIGN: 'sanity:productV2'
           - BASE_BRANCH: 9.0.x
+            TEST_CAMPAIGN: 'modules'
+          ## 9.1.x
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'functional:FO:01-03'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'functional:FO:04-07'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'functional:FO:08-12'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'functional:productV2'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'sanity:productV2'
+          - BASE_BRANCH: 9.1.x
             TEST_CAMPAIGN: 'modules'
           ## develop
           - BASE_BRANCH: develop

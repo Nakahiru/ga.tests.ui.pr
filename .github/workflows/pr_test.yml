@@ -11,6 +11,7 @@ on:
         required: true
         options:
           - 'develop'
+          - '9.1.x'
           - '9.0.x'
           - '8.2.x'
           - '8.1.x'
@@ -168,6 +169,9 @@ jobs:
             TEST_COMMAND: 'functional:FO:hummingbird:08-12'
           ## 9.0.x
           - BASE_BRANCH: 9.0.x
+            TEST_COMMAND: 'modules'
+          ## 9.1.x
+          - BASE_BRANCH: 9.1.x
             TEST_COMMAND: 'modules'
           ## develop
           - BASE_BRANCH: develop

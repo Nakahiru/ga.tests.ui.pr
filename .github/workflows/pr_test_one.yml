@@ -11,6 +11,7 @@ on:
         required: true
         options:
           - 'develop'
+          - '9.1.x'
           - '9.0.x'
           - '8.2.x'
           - '8.1.x'
@@ -283,6 +284,19 @@ jobs:
             TEST_CAMPAIGN: 'sanity:productV2'
           - BASE_BRANCH: 9.0.x
             TEST_CAMPAIGN: 'modules'
+          ## 9.1.x
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'functional:FO:01-03'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'functional:FO:04-07'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'functional:FO:08-12'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'functional:productV2'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'sanity:productV2'
+          - BASE_BRANCH: 9.1.x
+            TEST_CAMPAIGN: 'modules'
           ## develop
           - BASE_BRANCH: develop
             TEST_CAMPAIGN: 'functional:FO:01-03'
@@ -356,13 +370,13 @@ jobs:
           path: custom_actions
       # Create API Client for API campaign
       - name: Create API client
-        if: matrix.TEST_CAMPAIGN == 'functional:API' && (matrix.BASE_BRANCH == '9.0.x' || matrix.BASE_BRANCH == 'develop')
+        if: matrix.TEST_CAMPAIGN == 'functional:API' && (startsWith(matrix.BASE_BRANCH, '9.') || matrix.BASE_BRANCH == 'develop')
         run: |
           docker exec gatestsuipr-prestashop-git-1 php ./bin/console prestashop:api-client create ${{ env.CLIENT_ID_API }} --all-scopes --name='Test client' --description='Test client with all scopes' --timeout=3600 --secret=${{ env.CLIENT_SECRET_API }}
       # Keycloak is only needed for API campaign
       - name: Launch keycloak
         uses: ./custom_actions/.github/workflows/actions/launch-keycloak
-        if: matrix.TEST_CAMPAIGN == 'functional:API' && (matrix.BASE_BRANCH == '9.0.x' || matrix.BASE_BRANCH == 'develop')
+        if: matrix.TEST_CAMPAIGN == 'functional:API' && (startsWith(matrix.BASE_BRANCH, '9.') || matrix.BASE_BRANCH == 'develop')
 
       - name: Run Tests
         id: runTests

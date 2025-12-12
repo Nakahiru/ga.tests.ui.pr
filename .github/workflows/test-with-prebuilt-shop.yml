@@ -102,7 +102,7 @@ jobs:
 
       # Certificate
       - name: Generate a certificate
-        if: (inputs.base_branch == '8.1.x') || (inputs.base_branch == '8.2.x') || (inputs.base_branch == '9.0.x') || (inputs.base_branch == 'develop')
+        if: (inputs.base_branch == '8.1.x') || (inputs.base_branch == '8.2.x') || (startsWith(inputs.base_branch, '9.')) || (inputs.base_branch == 'develop')
         run: |
           ## Install MkCert
           sudo apt-get update
@@ -156,14 +156,14 @@ jobs:
 
       # Create API Client for API campaign
       - name: Create API client
-        if: inputs.test_command == 'functional:API' && (inputs.base_branch == '9.0.x' || inputs.base_branch == 'develop')
+        if: inputs.test_command == 'functional:API' && (startsWith(inputs.base_branch, '9.') || inputs.base_branch == 'develop')
         run: |
           docker ps
           docker exec my_prestashop-prestashop-git-1 php ./bin/console prestashop:api-client create ${{ env.CLIENT_ID_API }} --all-scopes --name='Test client' --description='Test client with all scopes' --timeout=3600 --secret=${{ env.CLIENT_SECRET_API }}
       # Keycloak is only needed for API campaign
       - name: Launch keycloak
         uses: ./custom_actions/.github/workflows/actions/launch-keycloak
-        if: inputs.test_command == 'functional:API' && (inputs.base_branch == '9.0.x' || inputs.base_branch == 'develop')
+        if: inputs.test_command == 'functional:API' && (startsWith(inputs.base_branch, '9.') || inputs.base_branch == 'develop')
 
       # Test dependencies are installed manually in each sub job that test the build, it could have been integrated inside the archive to reduce time here
       # but it turns out the archive is much bigger with all this code and it makes upload/download phase so much longer that it is more efficient to install
@@ -179,7 +179,7 @@ jobs:
       # Playwright must be installed all the time, we only install chromium since it's the only browser used
       - name: Install browsers
         working-directory: ${{ env.PS_DIR }}/tests/UI
-        if: ${{ inputs.base_branch == '8.0.x' || inputs.base_branch == '8.1.x' || inputs.base_branch == '8.2.x' || inputs.base_branch == '9.0.x' || inputs.base_branch == 'develop' }}
+        if: ${{ inputs.base_branch == '8.0.x' || inputs.base_branch == '8.1.x' || inputs.base_branch == '8.2.x' || startsWith(inputs.base_branch, '9.') || inputs.base_branch == 'develop' }}
         run: npx playwright install chromium
 
       - name: Run campaign ${{ inputs.test_command }} on prebuilt shop
